@@ -29,13 +29,14 @@ app.get('/plants/5', async (req, res) => {
     const doc = await readPlants();
 
     const page = 1;
-    const start = 
+    const num = (page * 10);
+    const start = (num - 10)
 
     const limit = 5;
 
     const items = [];
 
-    for (let i = 0; i <= limit; i++) {
+    for (let i = start; i <= limit; i++) {
         items.push(doc.plants[i]);
     }
 
