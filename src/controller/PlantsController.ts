@@ -3,6 +3,7 @@ import { readFileSync } from 'fs'
 
 const plantsData = './database/server.json'
 
+
 function readPlants() {
     try {
         const data = readFileSync(plantsData);
@@ -12,10 +13,29 @@ function readPlants() {
     }
 }
 
+
 export default {
     async listPlants(req: Request, res: Response) {
         try {
             const doc = await readPlants();
+
+            const pageNumber: any = req.query.page;
+            const limitNumber: any = req.query.limit;
+
+            const page = pageNumber || 1;
+
+            const num = (page * 5);
+            const start = (num - 5)
+
+            const limit = limitNumber || 5;
+
+            let newLimit = start + limit;
+
+            const items = [];
+
+            for (let i = start; i < newLimit; i++) {
+                items.push(doc.plants[i]);
+            }
 
             const pages = (doc.plants.length / 5);
 
@@ -27,11 +47,11 @@ export default {
             }
 
             const plants = [
-                doc.plants,
+                items,
                 obj
             ]
 
-            res.send(plants)
+            res.json(plants)
         } catch (error) {
             console.log('Request error:', error)
         }
