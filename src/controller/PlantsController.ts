@@ -3,7 +3,6 @@ import { readFileSync } from 'fs'
 
 const plantsData = './database/server.json'
 
-
 function readPlants() {
     try {
         const data = readFileSync(plantsData);
