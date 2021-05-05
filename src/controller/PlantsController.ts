@@ -22,12 +22,12 @@ export default {
             const pageNumber: any = req.query.page;
             const limitNumber: any = req.query.limit;
 
-            const page = pageNumber || 1;
+            const page = parseInt(pageNumber) || 1;
+            const limit = parseInt(limitNumber) || 5;
 
             const num = (page * 5);
-            const start = (num - 5)
 
-            const limit = limitNumber || 5;
+            const start = (num - 5)
 
             let newLimit = start + limit;
 
@@ -47,41 +47,21 @@ export default {
             }
 
             const plants = [
-                items,
+                doc.plants,
                 obj
             ]
 
-            res.json(plants)
+            page !== 1 || limitNumber ? res.json(items) : res.json(plants);
+
         } catch (error) {
             console.log('Request error:', error)
         }
     },
 
-    async listPlantsPaginate(req: Request, res: Response) {
-        try {
-            const doc = await readPlants();
-
-            const page = 2;
-            const num = (page * 5);
-            const start = (num - 5)
-
-            const limit = start + 5;
-
-            const items = [];
-
-            for (let i = start; i < limit; i++) {
-                items.push(doc.plants[i]);
-            }
-
-            res.send(items)
-        } catch (error) {
-
-        }
-    },
     async listPlantsEnvironment(req: Request, res: Response) {
         try {
             const doc = await readPlants();
-            res.send(doc.plants_environments)
+            res.json(doc.plants_environments)
         } catch (error) {
             console.log('Request error:', error)
         }
@@ -90,7 +70,7 @@ export default {
     async PlantsWaterFrequencies(req: Request, res: Response) {
         try {
             const doc = await readPlants()
-            res.send(doc.plants_water_frequencies)
+            res.json(doc.plants_water_frequencies)
         } catch (error) {
             console.log('Request error:', error)
         }
