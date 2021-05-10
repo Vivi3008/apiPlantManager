@@ -28,12 +28,16 @@ exports.default = {
             }
             const pages = (doc.plants.length / 5);
             const docs = doc.plants.length;
+            const plantsItems = [];
             const obj = {
                 docs,
                 pages
             };
+            for (let i = 0; i < 5; i++) {
+                plantsItems.push(doc.plants[i]);
+            }
             const plants = [
-                doc.plants,
+                plantsItems,
                 obj
             ];
             page !== 1 || limitNumber ? res.json(items) : res.json(plants);

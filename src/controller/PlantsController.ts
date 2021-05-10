@@ -40,13 +40,19 @@ export default {
 
             const docs = doc.plants.length;
 
+            const plantsItems = []
+
             const obj = {
                 docs,
                 pages
             }
 
+            for (let i = 0; i < 5; i++) {
+                plantsItems.push(doc.plants[i]);
+            }
+
             const plants = [
-                doc.plants,
+                plantsItems,
                 obj
             ]
 
