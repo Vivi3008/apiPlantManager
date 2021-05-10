@@ -42,7 +42,7 @@ export default {
 
             const plantsItems = []
 
-            const obj = {
+            const info = {
                 docs,
                 pages
             }
@@ -51,10 +51,12 @@ export default {
                 plantsItems.push(doc.plants[i]);
             }
 
-            const plants = [
-                plantsItems,
-                obj
-            ]
+            const plants = {
+                data: plantsItems,
+                info
+            }
+
+
 
             page !== 1 || limitNumber ? res.json(items) : res.json(plants);
 
