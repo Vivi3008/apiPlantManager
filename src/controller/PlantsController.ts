@@ -12,6 +12,13 @@ function readPlants() {
     }
 }
 
+function orderedPlants(array: any) {
+    array.sort((a: any, b: any) => {
+        return (a.name > b.name) ? 1 : ((b.name > a.name) ? -1 : 0)
+    })
+
+    return array;
+}
 
 export default {
     async listPlants(req: Request, res: Response) {
@@ -20,6 +27,7 @@ export default {
 
             const pageNumber: any = req.query.page;
             const limitNumber: any = req.query.limit;
+            const sort: any = req.query.sort;
 
             const page = parseInt(pageNumber) || 1;
             const limit = parseInt(limitNumber) || 5;
@@ -56,9 +64,13 @@ export default {
                 info
             }
 
-
-
-            page !== 1 || limitNumber ? res.json(items) : res.json(plants);
+            if (sort === 'asc') {
+                page !== 1 || limitNumber ?
+                    res.json(orderedPlants(items)) :
+                    res.json(orderedPlants(plants.data));
+            } else {
+                page !== 1 || limitNumber ? res.json(items) : res.json(plants);
+            }
 
         } catch (error) {
             console.log('Request error:', error)

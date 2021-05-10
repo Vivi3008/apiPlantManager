@@ -11,12 +11,19 @@ function readPlants() {
         console.log('Request Error: ', error);
     }
 }
+function orderedPlants(array) {
+    array.sort((a, b) => {
+        return (a.name > b.name) ? 1 : ((b.name > a.name) ? -1 : 0);
+    });
+    return array;
+}
 exports.default = {
     async listPlants(req, res) {
         try {
             const doc = await readPlants();
             const pageNumber = req.query.page;
             const limitNumber = req.query.limit;
+            const sort = req.query.sort;
             const page = parseInt(pageNumber) || 1;
             const limit = parseInt(limitNumber) || 5;
             const num = (page * 5);
@@ -29,18 +36,25 @@ exports.default = {
             const pages = (doc.plants.length / 5);
             const docs = doc.plants.length;
             const plantsItems = [];
-            const obj = {
+            const info = {
                 docs,
                 pages
             };
             for (let i = 0; i < 5; i++) {
                 plantsItems.push(doc.plants[i]);
             }
-            const plants = [
-                plantsItems,
-                obj
-            ];
-            page !== 1 || limitNumber ? res.json(items) : res.json(plants);
+            const plants = {
+                data: plantsItems,
+                info
+            };
+            if (sort === 'asc') {
+                page !== 1 || limitNumber ?
+                    res.json(orderedPlants(items)) :
+                    res.json(orderedPlants(plants.data));
+            }
+            else {
+                page !== 1 || limitNumber ? res.json(items) : res.json(plants);
+            }
         }
         catch (error) {
             console.log('Request error:', error);
